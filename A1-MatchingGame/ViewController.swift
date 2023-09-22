@@ -9,9 +9,12 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    
+    @IBOutlet weak var label1: UILabel!
     @IBOutlet weak var scoreTimerLabel: UILabel!
     var rectButtons: [UIButton]?
+    
+    var matchRect: [UIButton: Int]? // Dictionary for Matching
+    
     var gameTimerInterval: TimeInterval = 12.0
     var newRectInterval: TimeInterval = 1.0
     var gameTimer: Timer?
@@ -34,6 +37,15 @@ class ViewController: UIViewController {
         self.rectButtons = []
     }
     override func viewDidAppear(_ animated: Bool) {
+        self.createButton()
+        self.createButton()
+        self.createButton()
+        self.createButton()
+        self.createButton()
+        self.createButton()
+        self.createButton()
+        self.createButton()
+        self.createButton()
         self.createButton()
         self.createButton()
     }
