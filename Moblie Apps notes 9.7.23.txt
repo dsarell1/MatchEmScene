@@ -1,0 +1,113 @@
+Moblie Apps and IOS Programming
+Swift Notes:
+9/7/23
+
+import UIKit
+
+class ViewController: UIViewController {
+
+	@IBOutlet weak var createBoxRef: UIButton!
+	@IBAction func createBox(_ sender: Any) {
+		createRandomBox()
+	}
+
+
+	var boxes: [box] = []
+	var timer: Timer?
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		self.timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true, block: { _ in
+		self.createRandomBox
+		}) 
+		// unsets the timer
+		self.timer?.invalidate()
+		self.timer = nil
+	}
+
+	func createRandomBox() {
+		let width = CGFloat.random(in: 75...125)
+		let height = CGFloat.random(in: 75...125)
+		let x = CGFloat.random(in: 0...(self.view.frame.maxX - width - 2.0)
+		let y = CGFloat.random(in: 0...(self.createBoxRef.frame.MinY - height - 2.0))
+
+		let box = Box(frame: CGRect(x: x, y: y, width: width, height: height))
+		box.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
+		
+		if let b = self.boxes.last {
+			if Box.isTouching(box, b) {
+				print("Touching")
+				return
+			}
+		}
+		box.backgroundColor = UIColor(red: CGFloat.random(in: 0...1), green: CGFloat.random(in: 0...1), blue: CGFLoat.random(in: 0...1), alpha: 1)
+		view.addSubview(box)
+		self.boxes.append(box)
+	}
+	@objc func handleTap(_ sender: UITapGestureRecognizer) {
+		let box = sender.view as? Box
+		box?.changeDirection()
+		print("Hello" + Date().formatted())
+	}
+}
+
+class Box: UIView {
+
+	var label: UILabel?
+	var direction: Direction? {
+		didSet {
+		self.label!.text = direction?.rawValue
+		}
+	}
+
+	static let isTouching: (Box?, Box) -> Bool = { a, b in 
+		guard let a = a else { return false }
+		return a.frame.intersects(b.frame)
+	}
+
+	override init(frame: CGRect) {
+		super.init(frame: frame) 
+		self.direction = self.randomDir
+		let frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
+		self.label = UILabel(frame: frame)
+		self.label?.text = self.direction?.rawValue
+		self.label?.textAlignment = .center
+		self.addSubview(self.label!)
+	}
+
+	required init?(coder: NSCoder) {
+		FatalError("init(coder:) has not been implemented")
+	}
+	func randomDir() -> Direction {
+		let dirList = Direction.allCases
+		let rand = Int.random(in: 0...(dirList.count - 1))
+		return dirList[rand]
+	}
+	func changeDirection() {
+		if let dir = self.direction {
+		 self.direction!.rotateNextDir()
+		}
+		same as self.direction?.rotateNextDir()
+	}
+}
+enum Direction: String {
+	case up = "up emoji"
+	case right = "right emoji"
+	case down = "down emoji"
+	case left = "left emoji"
+
+	mutating func rotateNextDir() {
+		//gaurd let i = Direction.allCases else { return return value }
+		switch  self {
+		case .up:
+			self = .right
+		case .right:
+			self = .down
+		case .down:
+			self = .left
+		case .left:
+			self = .up
+		default:
+			self = .up
+		}
+	}
+}
