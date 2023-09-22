@@ -9,6 +9,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    
     @IBOutlet weak var scoreTimerLabel: UILabel!
     var rectButtons: [UIButton]?
     var gameTimerInterval: TimeInterval = 12.0
