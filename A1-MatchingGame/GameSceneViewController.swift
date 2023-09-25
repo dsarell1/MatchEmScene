@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  GameSceneViewController.swift
 //  A1-MatchingGame
 //
 //  Created by Dylan Sarell on 9/22/23.
@@ -34,8 +34,9 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         print("Hello World")
         print("Hello GitHub!!!")
-        self.rectButtons = []
+        //self.rectButtons = []
     }
+    /*
     override func viewDidAppear(_ animated: Bool) {
         self.createButton()
         self.createButton()
@@ -45,6 +46,12 @@ class ViewController: UIViewController {
         self.createButton()
         self.createButton()
         self.createButton()
+        self.createButton()
+        self.createButton()
+        self.createButton()
+    }*/
+    @IBAction func startButton(_ sender: UIButton) {
+        StartGame()
         self.createButton()
         self.createButton()
         self.createButton()
