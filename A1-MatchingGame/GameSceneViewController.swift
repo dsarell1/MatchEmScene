@@ -11,11 +11,9 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var label1: UILabel!
     @IBOutlet weak var scoreTimerLabel: UILabel!
-    
-    //@IBOutlet weak var startBtnOutlet: UIButton!
     @IBOutlet weak var startButtonOutlet: UIButton!
     
-    var rectButtons: [UIButton]?
+    //var rectButtons: [UIButton]?
     
     var matchRect: [UIButton: Int] = [:] // Dictionary for Matching
     
@@ -26,7 +24,7 @@ class ViewController: UIViewController {
     
     var gameRunning = false
     
-    var buttonTag = 1
+    var buttonTag = 0
     var rectCount = 0 {
         didSet {
             self.updateLabel()
@@ -39,7 +37,6 @@ class ViewController: UIViewController {
     }
     var timeRemaining = 12 {
         didSet {
-           // self.scoreTimerLabel.text = "Created \(self.rectCount) - Time: \(self.timeRemaining) - Score: \(self.score)"
             self.updateLabel()
         }
     }
@@ -47,7 +44,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        //self.rectButtons = []
     }
 
     @IBAction func startButton(_ sender: UIButton) {
@@ -60,7 +56,7 @@ class ViewController: UIViewController {
         else {
             //let startBtn = UIButton()
             self.view.backgroundColor = .white
-            self.view.addSubview(sender) //add back to superview
+            //self.view.addSubview(sender) //add back to superview
             //startBtn.text = "start"
             timeRemaining = 12;
         }
@@ -76,7 +72,7 @@ class ViewController: UIViewController {
                 self.view.backgroundColor = .red
                 Timer.invalidate()
                 self.gameRunning = false
-                self.view.addSubview(self.startButtonOutlet?)
+                //self.view.addSubview(self.startButtonOutlet)
             }
         })
         self.newRectTimer = Timer.scheduledTimer(withTimeInterval: newRectInterval, repeats: true, block: { Timer in
@@ -109,34 +105,33 @@ class ViewController: UIViewController {
         self.buttonTag += 1
         self.view.addSubview(buttonMatch)
         self.view.addSubview(buttonMatch2)
-        self.rectButtons?.append(buttonMatch)
-        self.rectButtons?.append(buttonMatch2)
+        
+        self.matchRect.updateValue(self.buttonTag, forKey: buttonMatch)
+        self.matchRect.updateValue(self.buttonTag, forKey: buttonMatch2)
+        //self.rectButtons?.append(buttonMatch)
+        //self.rectButtons?.append(buttonMatch2)
     }
     @objc func handleTap(_ sender: UIButton) {
         if self.gameRunning == true {
-            //print(sender.tag)
-            sender.setTitle("@", for: .normal)
-            //sender.removeFromSuperview()
-            self.score += 1
-            //print(self.rectButtons[sender])
-            //let matchButton: UIButton? = UIButton()
-            //if let a = matchButton {
-            //    if self.rectButtons[a] == self.rectButtons[sender] {
-            //       a.removeFromSuperview()
-            //       sender.removeFromSuperview()
-            //       self.score += 1
-            //    }
-            //    else {
-            //       matchButton = nil
-            //   }
-            // }
-            // else {
-            //    matchButton = sender
-            //    sender.setTitle("@", for: .normal)
-            // }
+            print(self.matchRect[sender]!)
+            var matchButton: UIButton? = UIButton()
+            if let a = matchButton {
+                if self.matchRect[a] == self.matchRect[sender] {
+                   a.removeFromSuperview()
+                   sender.removeFromSuperview()
+                   self.score += 1
+                }
+                else {
+                   matchButton = nil
+                }
+            }
+            else {
+                matchButton = sender
+                sender.setTitle("@", for: .normal)
+            }
         }
     }
-    
+  // ---------- Random Size, Location and Color Functions
     func randSize() -> CGSize {
         let width = CGFloat.random(in: 25.0...100.0)
         let height = CGFloat.random(in: 25.0...100.0)
