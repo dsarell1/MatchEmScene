@@ -12,7 +12,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var label1: UILabel!
     @IBOutlet weak var scoreTimerLabel: UILabel!
     
-    @IBOutlet weak var startBtn: UILabel!
+    //@IBOutlet weak var startBtnOutlet: UIButton!
+    @IBOutlet weak var startButtonOutlet: UIButton!
     
     var rectButtons: [UIButton]?
     
@@ -52,12 +53,13 @@ class ViewController: UIViewController {
     @IBAction func startButton(_ sender: UIButton) {
         if self.gameRunning == false {
             self.gameRunning = true
-            //startBtn.text = "reset"
+            startButtonOutlet.setTitle("Restart", for: .normal)
             sender.removeFromSuperview()
             StartGame()
         }
         else {
             //let startBtn = UIButton()
+            self.view.backgroundColor = .white
             self.view.addSubview(sender) //add back to superview
             //startBtn.text = "start"
             timeRemaining = 12;
@@ -74,7 +76,7 @@ class ViewController: UIViewController {
                 self.view.backgroundColor = .red
                 Timer.invalidate()
                 self.gameRunning = false
-                //self.view.addSubview(self.startBtn)
+                self.view.addSubview(self.startButtonOutlet?)
             }
         })
         self.newRectTimer = Timer.scheduledTimer(withTimeInterval: newRectInterval, repeats: true, block: { Timer in

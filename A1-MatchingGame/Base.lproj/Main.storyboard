@@ -52,7 +52,7 @@
                     </view>
                     <connections>
                         <outlet property="scoreTimerLabel" destination="6yp-um-dCs" id="ZuF-7l-uOE"/>
-                        <outlet property="startBtn" destination="d6r-QP-2cy" id="Yi0-qi-7L7"/>
+                        <outlet property="startButtonOutlet" destination="d6r-QP-2cy" id="t6X-Wm-uCe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
