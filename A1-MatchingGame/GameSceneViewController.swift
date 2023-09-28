@@ -120,12 +120,10 @@ class ViewController: UIViewController {
                    a.removeFromSuperview()
                    sender.removeFromSuperview()
                    self.score += 1
-                }
-                else {
+                } else {
                    matchButton = nil
                 }
-            }
-            else {
+            } else {
                 matchButton = sender
                 sender.setTitle("@", for: .normal)
             }
