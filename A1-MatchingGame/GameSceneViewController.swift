@@ -11,11 +11,12 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var label1: UILabel!
     @IBOutlet weak var scoreTimerLabel: UILabel!
-    @IBOutlet weak var startButtonOutlet: UIButton!
+    @IBOutlet var startButtonOutlet: UIButton!
     
     //var rectButtons: [UIButton]?
     
     var matchRect: [UIButton: Int] = [:] // Dictionary for Matching
+    var matchButton: UIButton?
     
     var gameTimerInterval: TimeInterval = 1.0
     var newRectInterval: TimeInterval = 1.0
@@ -114,17 +115,16 @@ class ViewController: UIViewController {
     @objc func handleTap(_ sender: UIButton) {
         if self.gameRunning == true {
             print(self.matchRect[sender]!)
-            var matchButton: UIButton? = UIButton()
-            if let a = matchButton {
+            if let a = self.matchButton {
                 if self.matchRect[a] == self.matchRect[sender] {
                    a.removeFromSuperview()
                    sender.removeFromSuperview()
                    self.score += 1
                 } else {
-                   matchButton = nil
+                   self.matchButton = nil
                 }
             } else {
-                matchButton = sender
+                self.matchButton = sender
                 sender.setTitle("@", for: .normal)
             }
         }
