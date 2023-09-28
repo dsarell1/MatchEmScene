@@ -73,7 +73,7 @@ class ViewController: UIViewController {
                 self.view.backgroundColor = .red
                 Timer.invalidate()
                 self.gameRunning = false
-                //self.view.addSubview(self.startButtonOutlet)
+                self.view.addSubview(self.startButtonOutlet)
             }
         })
         self.newRectTimer = Timer.scheduledTimer(withTimeInterval: newRectInterval, repeats: true, block: { Timer in
