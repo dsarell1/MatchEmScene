@@ -11,9 +11,8 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var label1: UILabel!
     @IBOutlet weak var scoreTimerLabel: UILabel!
+    @IBOutlet weak var gameOverLabel: UILabel!
     @IBOutlet var startButtonOutlet: UIButton!
-    
-    //var rectButtons: [UIButton]?
     
     var matchRect: [UIButton: Int] = [:] // Dictionary for Matching
     var matchButton: UIButton?
@@ -26,7 +25,7 @@ class ViewController: UIViewController {
     var gameRunning = false
     
     var buttonTag = 0
-    var rectCount = 0 {
+    var matchCount = 0 {
         didSet {
             self.updateLabel()
         }
@@ -48,22 +47,23 @@ class ViewController: UIViewController {
     }
 
     @IBAction func startButton(_ sender: UIButton) {
-        if self.gameRunning == false {
-            self.gameRunning = true
-            startButtonOutlet.setTitle("Restart", for: .normal)
-            sender.removeFromSuperview()
-            StartGame()
-        }
-        else {
-            //let startBtn = UIButton()
-            self.view.backgroundColor = .white
-            //self.view.addSubview(sender) //add back to superview
-            //startBtn.text = "start"
-            timeRemaining = 12;
-        }
+        self.view.backgroundColor = .white
+        startButtonOutlet.setTitle("Restart", for: .normal)
+        sender.removeFromSuperview()
+        StartGame()
     }
     
     func StartGame() {
+        // restart all the variables to defaults and remove the rectanges from dictionary and screen
+        removeRect()
+        self.gameOverLabel.text = ""
+        self.gameRunning = true
+        self.matchButton = nil
+        self.timeRemaining = 12
+        self.score = 0
+        self.matchCount = 0
+        self.buttonTag = 0
+        
         self.gameTimer = Timer.scheduledTimer(withTimeInterval: self.gameTimerInterval, repeats: true, block: { Timer in
             if self.timeRemaining > 0 {
                 self.timeRemaining -= 1
@@ -74,16 +74,21 @@ class ViewController: UIViewController {
                 Timer.invalidate()
                 self.gameRunning = false
                 self.view.addSubview(self.startButtonOutlet)
+                self.view.bringSubviewToFront(self.startButtonOutlet)
+                self.gameOverLabel.text = "Game Over"
+                self.view.bringSubviewToFront(self.gameOverLabel)
             }
         })
         self.newRectTimer = Timer.scheduledTimer(withTimeInterval: newRectInterval, repeats: true, block: { Timer in
             self.createButton()
-            self.rectCount += 2
+            self.matchCount += 1
         })
     }
+    
     func updateLabel() {
-        self.scoreTimerLabel.text = "Created \(self.rectCount) - Time: \(self.timeRemaining) - Score: \(self.score)"
+        self.scoreTimerLabel.text = "Created \(self.matchCount) - Time: \(self.timeRemaining) - Score: \(self.score)"
     }
+    
     func createButton() { // Creates 2 Rectangles with the same size and color but in random locations.
         let rectSize = self.randSize()
         let rectloc = self.randLocation(rectSize)
@@ -104,31 +109,44 @@ class ViewController: UIViewController {
         buttonMatch.tag = self.buttonTag
         buttonMatch2.tag = self.buttonTag
         self.buttonTag += 1
+        
         self.view.addSubview(buttonMatch)
         self.view.addSubview(buttonMatch2)
         
         self.matchRect.updateValue(self.buttonTag, forKey: buttonMatch)
         self.matchRect.updateValue(self.buttonTag, forKey: buttonMatch2)
-        //self.rectButtons?.append(buttonMatch)
-        //self.rectButtons?.append(buttonMatch2)
+
     }
     @objc func handleTap(_ sender: UIButton) {
         if self.gameRunning == true {
             print(self.matchRect[sender]!)
             if let a = self.matchButton {
                 if self.matchRect[a] == self.matchRect[sender] {
-                   a.removeFromSuperview()
-                   sender.removeFromSuperview()
-                   self.score += 1
+                    print("match!")
+                    sender.setTitle("👍", for: .normal)
+                    a.removeFromSuperview()
+                    sender.removeFromSuperview()
+                    self.score += 1
+                    self.matchButton = nil
                 } else {
-                   self.matchButton = nil
+                    print("not a Match!")
+                    a.setTitle("", for: .normal)
+                    self.matchButton = nil
                 }
             } else {
+                print("First rect!")
                 self.matchButton = sender
-                sender.setTitle("@", for: .normal)
+                sender.setTitle("👍", for: .normal)
             }
         }
     }
+    func removeRect() {
+        for (tag, value) in matchRect {
+            tag.removeFromSuperview()
+        }
+        matchRect.removeAll()
+    }
+    
   // ---------- Random Size, Location and Color Functions
     func randSize() -> CGSize {
         let width = CGFloat.random(in: 25.0...100.0)
