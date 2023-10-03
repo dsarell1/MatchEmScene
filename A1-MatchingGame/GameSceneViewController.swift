@@ -7,12 +7,12 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class GameSceneViewController: UIViewController {
     
     @IBOutlet weak var label1: UILabel!
-    @IBOutlet weak var scoreTimerLabel: UILabel!
-    @IBOutlet weak var gameOverLabel: UILabel!
-    @IBOutlet var startButtonOutlet: UIButton!
+    @IBOutlet weak var scoreTimerLabel: UILabel! // Score and timer Label
+    @IBOutlet weak var gameOverLabel: UILabel! // Game Over Label
+    @IBOutlet var startButtonOutlet: UIButton! // The Start/retry button
     
     var matchRect: [UIButton: Int] = [:] // Dictionary for Matching
     var matchButton: UIButton?
@@ -87,6 +87,7 @@ class ViewController: UIViewController {
     
     func updateLabel() {
         self.scoreTimerLabel.text = "Created \(self.matchCount) - Time: \(self.timeRemaining) - Score: \(self.score)"
+        self.view.bringSubviewToFront(self.scoreTimerLabel)
     }
     
     func createButton() { // Creates 2 Rectangles with the same size and color but in random locations.
@@ -118,13 +119,12 @@ class ViewController: UIViewController {
 
     }
     @objc func handleTap(_ sender: UIButton) {
-        sender.setTitle("👍", for: .normal)
         if self.gameRunning == true {
             print(self.matchRect[sender]!)
             if let a = self.matchButton {
                 if self.matchRect[a] == self.matchRect[sender] && self.matchButton != sender {
                     print("match!")
-                    //sender.setTitle("👍", for: .normal)
+                    sender.setTitle("👍", for: .normal)
                     a.removeFromSuperview()
                     sender.removeFromSuperview()
                     self.score += 1
@@ -137,7 +137,7 @@ class ViewController: UIViewController {
             } else {
                 print("First rect!")
                 self.matchButton = sender
-                //sender.setTitle("👍", for: .normal)
+                sender.setTitle("👍", for: .normal)
             }
         }
     }
@@ -155,7 +155,7 @@ class ViewController: UIViewController {
         return CGSize(width: width, height: height)
     }
     func randLocation(_ rectSize: CGSize) -> CGPoint {
-        let x = CGFloat.random(in: 0...(self.view.frame.width - (rectSize.width/2)))
+        let x = CGFloat.random(in: 0...(self.view.frame.width - (rectSize.width)))
         let topSafeInset = self.view.safeAreaInsets.bottom + 60
         let bottomSafeInset = self.view.safeAreaInsets.top + 70
         let y = CGFloat.random(in: (bottomSafeInset + (rectSize.height/2))...(self.view.frame.height - topSafeInset - (rectSize.height/2)))
