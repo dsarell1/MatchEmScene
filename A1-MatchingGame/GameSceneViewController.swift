@@ -121,7 +121,7 @@ class ViewController: UIViewController {
         if self.gameRunning == true {
             print(self.matchRect[sender]!)
             if let a = self.matchButton {
-                if self.matchRect[a] == self.matchRect[sender] {
+                if self.matchRect[a] == self.matchRect[sender] && self.matchButton != sender {
                     print("match!")
                     sender.setTitle("👍", for: .normal)
                     a.removeFromSuperview()
